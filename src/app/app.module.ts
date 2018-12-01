@@ -15,6 +15,7 @@ import { TopComponent } from './metronome/top/top.component';
     AppRoutingModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [TopComponent]
 })
 export class AppModule { }
