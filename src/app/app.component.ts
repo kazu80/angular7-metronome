@@ -1,10 +1,9 @@
-import { Component } from '@angular/core';
+import {Component, Injector} from '@angular/core';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: 'app-metronome',
+  template: ``
 })
 export class AppComponent {
-  title = 'angular7-metronome';
+  constructor(private injector: Injector) {}
 }
