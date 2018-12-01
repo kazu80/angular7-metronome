@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:elements": "ng build --prod --output-hashing=none && cat dist/angular7-metronome/{runtime,polyfills,scripts,main}.js > dist/angular7-metronome/app-metronome.js",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
