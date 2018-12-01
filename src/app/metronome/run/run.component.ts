@@ -12,4 +12,7 @@ export class RunComponent implements OnInit {
   ngOnInit() {
   }
 
+  private onClick() {
+    console.log('click');
+  }
 }
