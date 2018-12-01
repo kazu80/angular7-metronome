@@ -65,7 +65,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "angular7-metronome:build"
+            "browserTarget": "angular7-metronome:build",
+            "port": 4203
           },
           "configurations": {
             "production": {
