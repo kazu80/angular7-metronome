@@ -1,0 +1,35 @@
+$spBreakPoint: 375;
+
+@function pxToVw($pxValue) {
+    @return (($pxValue / $spBreakPoint) * 100) + vw;
+}
+
+.wrapper {
+    width: 100%;
+    height: 100%;
+    background-color: #DD0031;
+
+    header {
+        width: 100%;
+
+        .logo-wrapper {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: pxToVw(20);
+
+            .logo-image {
+                margin-right: pxToVw(10);
+                width: pxToVw(20.79);
+                height: pxToVw(27.17);
+            }
+
+            .logo-text {
+                color: #ffffff;
+                font-size: pxToVw(20);
+                font-weight: bold;
+                line-height: 100%;
+            }
+        }
+    }
+}
