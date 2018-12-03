@@ -127,5 +127,8 @@ function gameLoop(delta) {
   // Destroy application
   if (config.isEnd === true) {
     app.destroy(true);
+
+    // Banish canvas-wrapper
+    document.body.querySelector('#canvas-wrapper').style.display = 'none';
   }
 }

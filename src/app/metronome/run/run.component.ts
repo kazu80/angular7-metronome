@@ -22,6 +22,9 @@ export class RunComponent implements OnInit {
   }
 
   private onClick() {
+
+    console.log('foo');
+
     const url = '../../../assets/sound/s_02.mp3';
 
     this._loadBufferFromURL(url, (buffer) => {
