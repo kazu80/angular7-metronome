@@ -1,6 +1,7 @@
 const config = {
   isTap: false,
-  isSec01: false
+  isSec01: false,
+  isEnd: false
 };
 
 //Create a Pixi Application
@@ -118,5 +119,13 @@ function gameLoop(delta) {
 
   if (config.isSec01 === true) {
     circles.forEach((circle, key) => scaleUp(circle, key + 1.5));
+
+    // 3秒後に終わる
+    setTimeout(() => config.isEnd = true, 3000);
+  }
+
+  // Destroy application
+  if (config.isEnd === true) {
+    app.destroy(true);
   }
 }
