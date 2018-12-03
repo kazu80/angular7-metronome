@@ -17,16 +17,20 @@
 <body>
 <div class="wrapper">
   <app-metronome class="app"></app-metronome>
-  <!--
-  <div class="circle circle01"></div>
-  <div class="circle circle02"></div>
-  <div class="circle circle03"></div>
-  -->
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.7.1/pixi.min.js"></script>
 <script type="text/javascript">
+
+  const config = {
+      isTap: false
+  };
+
   //Create a Pixi Application
-  let app = new PIXI.Application({width: 256, height: 256});
+  let app = new PIXI.Application({
+      width: 256,
+      height: 256,
+      backgroundColor: 0xffffff
+  });
 
   app.renderer.view.style.position = "absolute";
   app.renderer.view.style.display = "block";
@@ -34,29 +38,89 @@
   app.renderer.resize(window.innerWidth, window.innerHeight);
   app.renderer.backgroundColor = 0xffffff;
 
-  let circle = new PIXI.Graphics();
-  circle.beginFill(0xDD0031);
-  circle.drawCircle(0, 0, 32);
+  /**
+   * Button
+   * @type {I18nInstructions.Text | ResponseContentType.Text | I18nUpdateOpCode.Text}
+   */
+  const button = new PIXI.Text('TAP');
+  button.anchor.x   = 0.5;
+  button.anchor.y   = 0.5;
+  button.position.x = window.innerWidth * 0.5;
+  button.position.y = window.innerHeight * 0.5;
 
-  circle.x = window.innerWidth / 2;
-  circle.y = window.innerHeight / 2;
+  //ボタンをステージに追加
+  app.stage.addChild(button);
 
-  app.stage.addChild(circle);
+  //タッチイベント(マウスイベント)を有効化
+  button.interactive = true;
+
+  // TOUCHイベント
+  button.on('tap', () => config.isTap = true );
+
+  // Tickerの中でも呼ぶため
+  const circle = new PIXI.Graphics();
+
+  //
+  startAnimation();
+
+  /**
+   * Add Circle
+   */
+  function addCircle () {
+      circle.beginFill(0xDD0031);
+      circle.drawCircle(0, 0, 1);
+
+      circle.x = window.innerWidth / 2;
+      circle.y = window.innerHeight / 2;
+      app.stage.addChild(circle);
+
+      // startAnimation();
+  }
+
+  function fadeOut(item) {
+      item.alpha -= 0.08;
+
+      if (item.alpha < 0) {
+          removeFromStage(item);
+          config.isTap = false;
+      }
+  }
+
+  /**
+   * stageから特定の消す
+   */
+  function removeFromStage(param) {
+      app.stage.removeChild(param);
+  }
+
+  /**
+   * Start Ticker
+   */
+  function startAnimation() {
+      app.ticker.add(delta => gameLoop(delta));
+  }
+
 
   //Add the canvas that Pixi automatically created for you to the HTML document
   document.body.querySelector('.wrapper').appendChild(app.view);
 
-  app.ticker.add(delta => gameLoop(delta));
+  //
 
   function gameLoop (delta) {
 
-    circle.scale.x += .05;
-    circle.scale.y += .05;
+      if (config.isTap === true) {
+          fadeOut(button);
+      }
 
-    if (circle.scale.y > 15) {
+      /*
+    circle.scale.x += 1;
+    circle.scale.y += 1;
+
+    if (circle.scale.y > 400) {
       circle.scale.x = 0;
       circle.scale.y = 0;
     }
+    */
   }
 </script>
 </body>
