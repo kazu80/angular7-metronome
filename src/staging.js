@@ -41,7 +41,7 @@ window.onload = function () {
   startAnimation();
 
   // Add the canvas that Pixi automatically created for you to the HTML document
-  document.body.querySelector('.wrapper').appendChild(app.view);
+  document.body.querySelector('#canvas-wrapper').appendChild(app.view);
 };
 
 
