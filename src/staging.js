@@ -1,6 +1,7 @@
 const config = {
   isTap: false,
   isSec01: false,
+  isSec02: false,
   isEnd: false
 };
 
@@ -11,7 +12,6 @@ let app = new PIXI.Application({
   backgroundColor: 0xffffff
 });
 
-const button = new PIXI.Text('ARE YOU READY ?');
 
 window.onload = function () {
   app.renderer.view.style.position = "absolute";
@@ -20,10 +20,8 @@ window.onload = function () {
   app.renderer.resize(window.innerWidth, window.innerHeight);
   app.renderer.backgroundColor = 0xffffff;
 
-  /**
-   * Button
-   * @type {I18nInstructions.Text | ResponseContentType.Text | I18nUpdateOpCode.Text}
-   */
+  /** Are you ready **/
+  const button = addText('ARE YOU READY ?', {});
   button.anchor.x = 0.5;
   button.anchor.y = 0.5;
   button.position.x = window.innerWidth * 0.5;
@@ -37,6 +35,7 @@ window.onload = function () {
 
   // TOUCHイベント
   button.on('tap', () => config.isTap = true);
+  /** /Are you ready **/
 
   // アニメーションの開始
   startAnimation();
@@ -45,6 +44,14 @@ window.onload = function () {
   document.body.querySelector('#canvas-wrapper').appendChild(app.view);
 };
 
+const texts = [];
+
+function addText(string, style) {
+  const text = new PIXI.Text(string, style);
+  texts.push(text);
+
+  return text;
+}
 
 /**
  * Add Circle
@@ -91,12 +98,19 @@ function startAnimation() {
   app.ticker.add(delta => gameLoop(delta));
 }
 
-function scaleUp(item, multi) {
-  item.scale.x += 10 * multi;
-  item.scale.y += 10 * multi;
+function scaleUp(item, key, length, cb) {
+  // 終了
+  const multi = key + 1.5;
 
-  if (item.scale.y > 400 * multi) {
-    config.isSec01 = false;
+  if (key + 1 === length) {
+    if (item.scale.y > 399 * multi) {
+      return cb();
+    }
+  }
+
+  if (item.scale.y < 400 * multi) {
+    item.scale.x += 10 * multi;
+    item.scale.y += 10 * multi;
   }
 }
 
@@ -106,7 +120,7 @@ function scaleUp(item, multi) {
 function gameLoop(delta) {
 
   if (config.isTap === true) {
-    fadeOut(button);
+    fadeOut(texts[0]);
 
     // ボタンが押されたら、sec01を発火
     if (config.isTap === false) {
@@ -118,10 +132,19 @@ function gameLoop(delta) {
   }
 
   if (config.isSec01 === true) {
-    circles.forEach((circle, key) => scaleUp(circle, key + 1.5));
+    // 円を大きくする
+    circles.forEach((circle, key) =>
+      scaleUp(circle, key, circles.length,() => config.isSec01 = false));
 
-    // 3秒後に終わる
-    setTimeout(() => config.isEnd = true, 3000);
+    // ○秒後にSec01を終える
+    const sec = 2000;
+    setTimeout(() => {
+      config.isSec02 = true
+    }, sec);
+  }
+
+  if (config.isSec02 === true) {
+    setTimeout(() => config.isEnd = true, 2000);
   }
 
   // Destroy application
