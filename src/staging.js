@@ -2,6 +2,7 @@ const config = {
   isTap: false,
   isSec01: false,
   isSec02: false,
+  isSec02TextMoved: false,
   isEnd: false
 };
 
@@ -43,6 +44,16 @@ window.onload = function () {
   // Add the canvas that Pixi automatically created for you to the HTML document
   document.body.querySelector('#canvas-wrapper').appendChild(app.view);
 };
+
+/**
+ * Add Images
+ */
+const images = [];
+function addImage(path) {
+  const image = PIXI.Sprite.fromImage(path);
+  images.push(image);
+  return image;
+}
 
 /**
  * Add Filter
@@ -153,7 +164,7 @@ function gameLoop(delta) {
 
     // 次のステップへ
     if (config.isSec01 === false) {
-      const text = addText('METRONOME', {fill: 'white'});
+      const text = addText('METRONOME', {fill: 'white', fontWeight: 'bold'});
       text.anchor.x   = 0.5;
       text.anchor.y   = 0.5;
       text.position.x = window.innerWidth * 0.5;
@@ -170,23 +181,62 @@ function gameLoop(delta) {
   }
 
   if (config.isSec02 === true) {
-    const text = texts[1];
+    const text   = texts[1];
     const filter = filters[0];
 
+    // 文字出現
     if (text.alpha < 1) {
       text.alpha += 0.05;
     }
 
-    if (text.y < 400) {
-      text.y += 0.8;
+    if (filter.blur > 0) {
+      filter.blur -= 0.4;
     }
 
-    if (filter.blur > 0) {
-      filter.blur -= 0.2;
+    // 文字移動
+    if (config.isSec02TextMoved === false && text.y < 480) {
+      text.y += 2.5;
+    }
+    else if (config.isSec02TextMoved === false) {
+      // 文字の移動が終わったら
+
+      /** メトロノーム画像生成 **/
+      const image = addImage('assets/image/stage/logo.svg');
+
+      image.anchor.x = 0.45;
+      image.anchor.y = 0.6;
+      image.x = window.innerWidth * 0.5;
+      image.y = window.innerHeight * 0.5;
+      image.alpha = 0.1;
+
+      // 画像にぼかしを入れる
+      addFilters(image, 5);
+
+      // stageに追加
+      app.stage.addChild(image);
+
+      // 次の演出へ
+      config.isSec02TextMoved = true;
+    }
+
+    // METRONOMEが下がりきった状態
+    if (config.isSec02TextMoved === true) {
+      const image       = images[0];
+      const imageFilter = filters[1];
+
+      // 画像の透過度を上げる
+      if (image.alpha < 1) {
+        image.alpha += 0.05;
+      }
+
+      // 画像のぼかしを下げる
+      if (imageFilter.blur > 0) {
+        imageFilter.blur -= 0.2;
+      }
     }
 
     const sec = 4000;
-    setTimeout(() => config.isEnd = true, sec);
+    // setTimeout(() => config.isEnd = true, sec);
   }
 
   // Destroy application
