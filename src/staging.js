@@ -27,14 +27,14 @@ window.onload = function () {
   button.position.x = window.innerWidth * 0.5;
   button.position.y = window.innerHeight * 0.5;
 
-  //ボタンをステージに追加
-  app.stage.addChild(button);
-
   //タッチイベント(マウスイベント)を有効化
   button.interactive = true;
 
   // TOUCHイベント
   button.on('tap', () => config.isTap = true);
+
+  //ボタンをステージに追加
+  app.stage.addChild(button);
   /** /Are you ready **/
 
   // アニメーションの開始
@@ -44,8 +44,24 @@ window.onload = function () {
   document.body.querySelector('#canvas-wrapper').appendChild(app.view);
 };
 
-const texts = [];
+/**
+ * Add Filter
+ */
+const filters = [];
+function addFilters(item, blur) {
+  const filter = new PIXI.filters.BlurFilter();
+  filter.blur  = blur;
+  item.filters = [filter];
 
+  filters.push(filter);
+
+  return filter;
+}
+
+/**
+ * Add Texts
+ */
+const texts = [];
 function addText(string, style) {
   const text = new PIXI.Text(string, style);
   texts.push(text);
@@ -57,7 +73,6 @@ function addText(string, style) {
  * Add Circle
  */
 const circles = [];
-
 function addCircle(alpha) {
   const circle = new PIXI.Graphics();
   circle.beginFill(0xDD0031);
@@ -136,15 +151,42 @@ function gameLoop(delta) {
     circles.forEach((circle, key) =>
       scaleUp(circle, key, circles.length,() => config.isSec01 = false));
 
-    // ○秒後にSec01を終える
-    const sec = 2000;
-    setTimeout(() => {
-      config.isSec02 = true
-    }, sec);
+    // 次のステップへ
+    if (config.isSec01 === false) {
+      const text = addText('METRONOME', {fill: 'white'});
+      text.anchor.x   = 0.5;
+      text.anchor.y   = 0.5;
+      text.position.x = window.innerWidth * 0.5;
+      text.position.y = window.innerHeight * 0.5;
+      text.alpha      = 0;
+
+      addFilters(text, 5);
+
+      //ボタンをステージに追加
+      app.stage.addChild(text);
+
+      setTimeout(() => config.isSec02 = true, 800);
+    }
   }
 
   if (config.isSec02 === true) {
-    setTimeout(() => config.isEnd = true, 2000);
+    const text = texts[1];
+    const filter = filters[0];
+
+    if (text.alpha < 1) {
+      text.alpha += 0.05;
+    }
+
+    if (text.y < 400) {
+      text.y += 0.8;
+    }
+
+    if (filter.blur > 0) {
+      filter.blur -= 0.2;
+    }
+
+    const sec = 4000;
+    setTimeout(() => config.isEnd = true, sec);
   }
 
   // Destroy application
