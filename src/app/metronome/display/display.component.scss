@@ -24,6 +24,8 @@ $spBreakPoint: 375;
     top: 50%;
     transform: translate(-50%, -50%);
     border-radius: 50%;
+    animation: ripple infinite ease-out;
+    animation-duration: 1000ms;
 }
 
 .circle01 {
@@ -35,5 +37,24 @@ $spBreakPoint: 375;
 .circle02 {
     width: pxToVw(252);
     height: pxToVw(252);
-    border: pxToVw(10) solid rgba(255,255,255,.5);
+    border-style: solid;
+    border-color: rgba(255,255,255,.5);
+    border-width: pxToVw(10);
+    animation-delay: 300ms;
+}
+
+@keyframes ripple {
+    0% {
+        width: pxToVw(179);
+        height: pxToVw(179);
+        border-color: rgba(255,255,255,1);
+        border-width: pxToVw(1);
+    }
+
+    100% {
+        width: pxToVw(280);
+        height: pxToVw(280);
+        border-color: rgba(255,255,255,0);
+        border-width: pxToVw(13);
+    }
 }
