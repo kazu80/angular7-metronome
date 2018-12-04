@@ -10,6 +10,7 @@ $spBreakPoint: 375;
     background-color: #DD0031;
 
     header {
+        margin-bottom: pxToVw(114);
         width: 100%;
 
         .logo-wrapper {
@@ -31,5 +32,13 @@ $spBreakPoint: 375;
                 line-height: 100%;
             }
         }
+    }
+
+    .display {
+        display: block;
+        position: relative;
+        margin: 0 auto;
+        width: pxToVw(179);
+        height: pxToVw(179);
     }
 }

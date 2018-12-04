@@ -1,0 +1,39 @@
+$spBreakPoint: 375;
+
+@function pxToVw($pxValue) {
+    @return (($pxValue / $spBreakPoint) * 100) + vw;
+}
+
+.display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    color: #000000;
+    font-size: pxToVw(80);
+    line-height: 100%;
+    background-color: #ffffff;
+    border-radius : 50%;
+}
+
+.circle01,
+.circle02 {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+}
+
+.circle01 {
+    width: pxToVw(210);
+    height: pxToVw(210);
+    border: pxToVw(5) solid rgba(255,255,255,.8);
+}
+
+.circle02 {
+    width: pxToVw(252);
+    height: pxToVw(252);
+    border: pxToVw(10) solid rgba(255,255,255,.5);
+}

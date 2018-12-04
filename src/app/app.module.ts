@@ -5,12 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TopComponent } from './metronome/top/top.component';
 import { RunComponent } from './metronome/run/run.component';
+import { DisplayComponent } from './metronome/display/display.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TopComponent,
-    RunComponent
+    RunComponent,
+    DisplayComponent
   ],
   imports: [
     BrowserModule,
