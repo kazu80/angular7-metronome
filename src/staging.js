@@ -1,8 +1,8 @@
 const config = {
   isTap: false,
-  isSec01: false,
-  isSec02: false,
-  isSec03: false,
+  isSec01: undefined,
+  isSec02: undefined,
+  isSec03: undefined,
   isEnd: false
 };
 
@@ -165,6 +165,7 @@ function gameLoop(delta) {
     }
   }
 
+  // Step01
   if (config.isSec01 === true) {
     // 円を大きくする
     circles.forEach((circle, key) =>
@@ -203,10 +204,11 @@ function gameLoop(delta) {
       app.stage.addChild(text);
 
       // ○秒後にsec02へ
-      setTimeout(() => config.isSec02 = true, 2000);
+      setTimeout(() => config.isSec02 = true, 1000);
     }
   }
 
+  // Step02
   if (config.isSec02 === true) {
     const text   = texts[1];
     const filter = filters[0];
@@ -240,7 +242,7 @@ function gameLoop(delta) {
   }
 
   // ロゴと文字が出た状態で、○秒間静止
-  if (config.isSec02 === false) {
+  if (config.isSec01 === false && config.isSec02 === false) {
 
     // ○秒後にsec03へ
     setTimeout(() => config.isSec03 = true, 2000);
@@ -248,6 +250,48 @@ function gameLoop(delta) {
 
     const sec = 4000;
     // setTimeout(() => config.isEnd = true, sec);
+  }
+
+  // Step03 - 文字と画像を消す
+  if (config.isSec03 === true) {
+    const text   = texts[1];
+    const filter = filters[0];
+
+    // 文字を消す
+    if (text.alpha > 0) {
+      text.alpha -= 0.05;
+    }
+
+    // 文字をぼかす
+    if (filter.blur < 5) {
+      filter.blur += 0.4;
+    }
+
+    // ロゴ
+    const image       = images[0];
+    const imageFilter = filters[1];
+
+    // 画像を消す
+    if (image.alpha > 0) {
+      image.alpha -= 0.05;
+    }
+
+    // 画像をぼかす
+    if (imageFilter.blur < 5) {
+      imageFilter.blur += 0.4;
+    }
+
+    // 画像をぼかしきったら、step03の静止状態へ
+    if (imageFilter.blur >= 5) {
+      config.isSec03 = false;
+    }
+  }
+
+  // 消えた状態で○秒間静止、その後step04へ
+  if (config.isSec02 === false && config.isSec03 === false) {
+
+    // ○秒後にsec04へ
+    setTimeout(() => config.isSec04 = true, 1000);
   }
 
   // Destroy application
