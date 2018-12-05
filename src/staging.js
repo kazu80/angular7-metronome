@@ -2,7 +2,7 @@ const config = {
   isTap: false,
   isSec01: false,
   isSec02: false,
-  isSec02TextMoved: false,
+  isSec03: false,
   isEnd: false
 };
 
@@ -20,6 +20,9 @@ window.onload = function () {
   app.renderer.autoResize = true;
   app.renderer.resize(window.innerWidth, window.innerHeight);
   app.renderer.backgroundColor = 0xffffff;
+
+  /** 画像の読み込み **/
+  addImage('assets/image/stage/logo.svg');
 
   /** Are you ready **/
   const button = addText('ARE YOU READY ?', {});
@@ -49,9 +52,14 @@ window.onload = function () {
  * Add Images
  */
 const images = [];
+
 function addImage(path) {
   const image = PIXI.Sprite.fromImage(path);
   images.push(image);
+
+  // 画像の読み込み完了を知るサンプル
+  // image.texture.baseTexture.on("loaded", (e) => console.log(image.width));
+
   return image;
 }
 
@@ -160,15 +168,33 @@ function gameLoop(delta) {
   if (config.isSec01 === true) {
     // 円を大きくする
     circles.forEach((circle, key) =>
-      scaleUp(circle, key, circles.length,() => config.isSec01 = false));
+      scaleUp(circle, key, circles.length,() => {
+        config.isSec01 = false;
+      }));
 
     // 次のステップへ
     if (config.isSec01 === false) {
+      // [画像]の準備（設定）
+      const image = images[0];
+
+      image.anchor.x = 0.45;
+      image.anchor.y = 0.6;
+      image.x        = window.innerWidth * 0.5;
+      image.y        = window.innerHeight * 0.5;
+      image.alpha    = 0;
+
+      // 画像にぼかしを入れる
+      addFilters(image, 5);
+
+      // stageに追加
+      app.stage.addChild(image);
+
+      // [METRONOME]を準備
       const text = addText('METRONOME', {fill: 'white', fontWeight: 'bold'});
       text.anchor.x   = 0.5;
       text.anchor.y   = 0.5;
       text.position.x = window.innerWidth * 0.5;
-      text.position.y = window.innerHeight * 0.5;
+      text.position.y = image.y + (image.height * 0.5) + 10;
       text.alpha      = 0;
 
       addFilters(text, 5);
@@ -176,7 +202,8 @@ function gameLoop(delta) {
       //ボタンをステージに追加
       app.stage.addChild(text);
 
-      setTimeout(() => config.isSec02 = true, 800);
+      // ○秒後にsec02へ
+      setTimeout(() => config.isSec02 = true, 2000);
     }
   }
 
@@ -193,47 +220,31 @@ function gameLoop(delta) {
       filter.blur -= 0.4;
     }
 
-    // 文字移動
-    if (config.isSec02TextMoved === false && text.y < 480) {
-      text.y += 2.5;
-    }
-    else if (config.isSec02TextMoved === false) {
-      // 文字の移動が終わったら
+    // ロゴ出現
+    const image       = images[0];
+    const imageFilter = filters[1];
 
-      /** メトロノーム画像生成 **/
-      const image = addImage('assets/image/stage/logo.svg');
-
-      image.anchor.x = 0.45;
-      image.anchor.y = 0.6;
-      image.x = window.innerWidth * 0.5;
-      image.y = window.innerHeight * 0.5;
-      image.alpha = 0.1;
-
-      // 画像にぼかしを入れる
-      addFilters(image, 5);
-
-      // stageに追加
-      app.stage.addChild(image);
-
-      // 次の演出へ
-      config.isSec02TextMoved = true;
+    // 画像の透過度を上げる
+    if (image.alpha < 1) {
+      image.alpha += 0.05;
     }
 
-    // METRONOMEが下がりきった状態
-    if (config.isSec02TextMoved === true) {
-      const image       = images[0];
-      const imageFilter = filters[1];
-
-      // 画像の透過度を上げる
-      if (image.alpha < 1) {
-        image.alpha += 0.05;
-      }
-
-      // 画像のぼかしを下げる
-      if (imageFilter.blur > 0) {
-        imageFilter.blur -= 0.2;
-      }
+    // 画像のぼかしを下げる
+    if (imageFilter.blur > 0) {
+      imageFilter.blur -= 0.2;
     }
+
+    if (imageFilter.blur <= 0) {
+      config.isSec02 = false;
+    }
+  }
+
+  // ロゴと文字が出た状態で、○秒間静止
+  if (config.isSec02 === false) {
+
+    // ○秒後にsec03へ
+    setTimeout(() => config.isSec03 = true, 2000);
+
 
     const sec = 4000;
     // setTimeout(() => config.isEnd = true, sec);
