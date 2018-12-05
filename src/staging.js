@@ -3,6 +3,8 @@ const config = {
   isSec01: undefined,
   isSec02: undefined,
   isSec03: undefined,
+  isSec04: undefined,
+  isSec05: undefined,
   isEnd: false
 };
 
@@ -22,6 +24,8 @@ window.onload = function () {
   app.renderer.backgroundColor = 0xffffff;
 
   /** 画像の読み込み **/
+  addImage('assets/image/stage/logo.svg');
+  addImage('assets/image/stage/angular-blank.png');
   addImage('assets/image/stage/logo.svg');
 
   /** Are you ready **/
@@ -288,10 +292,101 @@ function gameLoop(delta) {
   }
 
   // 消えた状態で○秒間静止、その後step04へ
-  if (config.isSec02 === false && config.isSec03 === false) {
+  if (config.isSec02 === false && config.isSec03 === false && config.isSec04 === undefined) {
+
+    // sec04の準備
+    const image    = images[1];
+    image.anchor.x = 0.5;
+    image.anchor.y = 0.5;
+    image.x        = window.innerWidth * 0.5;
+    image.y        = -470;
+    // image.y = window.innerHeight * 0.5;
+
+    const scale = 3.2;
+    image.scale.x = scale;
+    image.scale.y = scale;
+
+    // stageに追加
+    app.stage.addChild(image);
 
     // ○秒後にsec04へ
     setTimeout(() => config.isSec04 = true, 1000);
+  }
+
+  // sec04
+  if (config.isSec04 === true) {
+    const image = images[1];
+
+    // 画像を下に移動
+    const positionY = window.innerHeight * 0.5 - 100;
+    if (image.y < positionY) {
+      image.y += 40;
+    }
+
+    // 画像の下移動が終わったら
+    if (image.y >= positionY) {
+      // 序盤で使った丸を消す
+      circles.forEach((circle, key) => circle.alpha = 0);
+
+      // 画像を縮小させる
+      if (image.scale.y > 1) {
+        image.scale.x -= 0.02;
+        image.scale.y -= 0.02;
+      }
+
+      // 画像が縮小終わったら、step04の静止状態へ
+      if (image.scale.y <= 1) {
+        config.isSec04 = false;
+      }
+    }
+  }
+
+  // 消えた状態で○秒間静止、その後step05へ
+  if (config.isSec03 === false && config.isSec04 === false && config.isSec05 === undefined) {
+    // [画像]の準備（設定）
+    const angular = images[1];
+    const image = images[2];
+
+    image.anchor.x = 0.45;
+    image.anchor.y = 0.6;
+    image.x        = window.innerWidth * 0.5;
+    image.y        = angular.y + 15;
+    image.scale.x  = 0.8;
+    image.scale.y  = 0.8;
+    image.alpha    = 0;
+
+    // 画像にぼかしを入れる
+    addFilters(image, 5);
+
+    // stageに追加
+    app.stage.addChild(image);
+
+    // sec05へ
+    config.isSec05 = true;
+  }
+
+  // sec05
+  if (config.isSec05 === true) {
+    // ロゴ出現
+    const image       = images[2];
+    const imageFilter = filters[2];
+
+    // console.log(filters, imageFilter.blur);
+
+    // 画像の透過度を上げる
+    if (image.alpha < 1) {
+      image.alpha += 0.05;
+    }
+
+    // 画像のぼかしを下げる
+    if (imageFilter.blur > 0) {
+      imageFilter.blur -= 0.2;
+    }
+
+    // 画像が出現したら
+    if (imageFilter.blur <= 0) {
+      config.isSec05 = false;
+    }
   }
 
   // Destroy application
