@@ -1,0 +1,20 @@
+$spBreakPoint: 375;
+
+@function pxToVw($pxValue) {
+    @return (($pxValue / $spBreakPoint) * 100) + vw;
+}
+
+
+:host {
+    position: absolute;
+    bottom : 19px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+.run-button {
+    font-size: pxToVw(18);
+    font-weight: bold;
+    line-height: 100%;
+}
