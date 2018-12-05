@@ -6,13 +6,19 @@ import { AppComponent } from './app.component';
 import { TopComponent } from './metronome/top/top.component';
 import { RunComponent } from './metronome/run/run.component';
 import { DisplayComponent } from './metronome/display/display.component';
+import { TempoComponent } from './metronome/tempo/tempo.component';
+import { BeatComponent } from './metronome/beat/beat.component';
+import { SoundComponent } from './metronome/sound/sound.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TopComponent,
     RunComponent,
-    DisplayComponent
+    DisplayComponent,
+    TempoComponent,
+    BeatComponent,
+    SoundComponent
   ],
   imports: [
     BrowserModule,

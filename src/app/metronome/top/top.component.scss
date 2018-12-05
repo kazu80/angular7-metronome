@@ -37,8 +37,15 @@ $spBreakPoint: 375;
     .display {
         display: block;
         position: relative;
-        margin: 0 auto;
+        margin: 0 auto pxToVw(187);
         width: pxToVw(179);
         height: pxToVw(179);
+    }
+
+    .buttons-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding : 0 pxToVw(50);
     }
 }

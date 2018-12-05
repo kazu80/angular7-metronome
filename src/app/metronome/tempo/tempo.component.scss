@@ -1,0 +1,25 @@
+$spBreakPoint: 375;
+
+@function pxToVw($pxValue) {
+    @return (($pxValue / $spBreakPoint) * 100) + vw;
+}
+
+:host {
+    position: relative;
+    width: pxToVw(74.61);
+    height: pxToVw(74.61);
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: 1px solid #707070;
+    box-shadow:3px 3px 6px 0px rgba(0,0,0,0.5);
+}
+
+.tempo-button {
+    position: absolute;
+    top : 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: pxToVw(18);
+    line-height: 100%;
+    font-weight: bold;
+}
