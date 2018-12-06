@@ -322,8 +322,7 @@ function gameLoop(delta) {
     image.anchor.x = 0.5;
     image.anchor.y = 0.5;
     image.x        = window.innerWidth * 0.5;
-    // image.y        = -470;
-    image.y = window.innerHeight * 0.5;
+    image.y        = -470;
 
     const scale = 3.2;
     image.scale.x = scale;
@@ -341,7 +340,7 @@ function gameLoop(delta) {
     const image = images[1];
 
     // 画像を下に移動
-    const positionY = window.innerHeight * 0.5 - 100;
+    const positionY = window.innerHeight * 0.5;
     if (image.y < positionY) {
       image.y += 40;
     }
@@ -390,7 +389,7 @@ function gameLoop(delta) {
 
   // sec05
   if (config.isSec05 === true) {
-    // ロゴ出現
+    // ロゴ出現（metronomeの白SVG画像）
     const image       = images[2];
     const imageFilter = filters[2];
 
@@ -411,8 +410,6 @@ function gameLoop(delta) {
   }
 
   if (config.isSec05 === false && config.isSec06 === undefined) {
-    const image = images[2];
-
     /** [metronome]を作成 **/
     const metronome = addText('METRONOME', {fontWeight: 'bold'});
     metronome.anchor.x = 0.5;
@@ -442,9 +439,27 @@ function gameLoop(delta) {
     //[metronome]をステージに追加
     app.stage.addChild(start);
 
+    // stage6へ
+    config.isSec06 = true;
+  }
 
-    // コードの最後にループを止める
-    animationStop();
+  // Stage6
+  // ロゴを上に移動
+  if (config.isSec06 === true) {
+    const angular = images[1];
+    const image   = images[2];
+
+    const position = -50;
+    const speed = -3;
+
+    if (angular.y > (window.innerHeight * 0.5) + position) {
+      angular.y += speed;
+      image.y += speed;
+    }
+
+    if (angular.y <= (window.innerHeight * 0.5) + position) {
+      animationStop();
+    }
   }
 
   // Destroy application
