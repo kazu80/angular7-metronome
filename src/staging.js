@@ -6,6 +6,7 @@ const config = {
   isSec04: undefined,
   isSec05: undefined,
   isSec06: undefined,
+  isSec07: undefined,
   isEnd: false
 };
 
@@ -411,7 +412,7 @@ function gameLoop(delta) {
 
   if (config.isSec05 === false && config.isSec06 === undefined) {
     /** [metronome]を作成 **/
-    const metronome = addText('METRONOME', {fontWeight: 'bold'});
+    const metronome = addText('METRONOME', {fontWeight: 'bold', fontSize: 40});
     metronome.anchor.x = 0.5;
     metronome.anchor.y = 0.5;
     metronome.position.x = window.innerWidth * 0.5;
@@ -426,7 +427,7 @@ function gameLoop(delta) {
     /** /[metronome]を作成 **/
 
     /** [START]を作成 **/
-    const start = addText('START', {fontWeight: 'bold'});
+    const start = addText('START', {fontWeight: 'bold', fontSize: 20});
     start.anchor.x = 0.5;
     start.anchor.y = 0.5;
     start.position.x = window.innerWidth * 0.5;
@@ -450,14 +451,49 @@ function gameLoop(delta) {
     const image   = images[2];
 
     const position = -50;
-    const speed = -3;
+    const speed    = -3;
 
     if (angular.y > (window.innerHeight * 0.5) + position) {
       angular.y += speed;
-      image.y += speed;
+      image.y   += speed;
     }
 
     if (angular.y <= (window.innerHeight * 0.5) + position) {
+      const metronome = texts[2];
+      const tap       = texts[3];
+
+      metronome.y = angular.y   + (angular.height * 0.5)   + 40;
+      tap.y       = metronome.y + (metronome.height * 0.5) + 140;
+
+      config.isSec06 = false;
+      config.isSec07 = true;
+    }
+  }
+
+  // Stage07
+  // [Metronome]と[START]を表示する
+  if (config.isSec07 === true) {
+    const metronome = texts[2];
+    const start     = texts[3];
+    const filterM   = filters[3];
+    const filterS   = filters[4];
+
+    // 画像の透過度を上げる
+    const speedAlpha = 0.05;
+    if (metronome.alpha < 1) {
+      metronome.alpha += speedAlpha;
+      start.alpha     += speedAlpha;
+    }
+
+    // 画像のぼかしを下げる
+    const speedBlur = -0.2;
+    if (filterM.blur > 0) {
+      filterM.blur += speedBlur;
+      filterS.blur += speedBlur;
+    }
+
+    // 画像が出現したら
+    if (filterS.blur <= 0) {
       animationStop();
     }
   }
