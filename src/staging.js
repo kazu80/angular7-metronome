@@ -5,6 +5,7 @@ const config = {
   isSec03: undefined,
   isSec04: undefined,
   isSec05: undefined,
+  isSec06: undefined,
   isEnd: false
 };
 
@@ -39,14 +40,19 @@ window.onload = function () {
   button.interactive = true;
 
   // TOUCHイベント
-  button.on('tap', () => config.isTap = true);
+  button.on('tap', () => {
+    config.isTap = true;
+
+    console.log('tap!', config);
+    animationStart();
+  });
 
   //ボタンをステージに追加
   app.stage.addChild(button);
   /** /Are you ready **/
 
-  // アニメーションの開始
-  startAnimation();
+  // アニメーションの登録
+  animationRegistration();
 
   // Add the canvas that Pixi automatically created for you to the HTML document
   document.body.querySelector('#canvas-wrapper').appendChild(app.view);
@@ -116,10 +122,12 @@ function addCircle(alpha) {
 function fadeOut(item) {
   item.alpha -= 0.08;
 
-  if (item.alpha < 0) {
-    removeFromStage(item);
-    config.isTap = false;
-  }
+  //if (item.alpha < 0) {
+    // removeFromStage(item);
+    // config.isTap = false;
+// }
+
+  return item.alpha <= 0 ? true : false;
 }
 
 /**
@@ -132,8 +140,18 @@ function removeFromStage(param) {
 /**
  * Start Ticker
  */
-function startAnimation() {
+function animationRegistration() {
   app.ticker.add(delta => gameLoop(delta));
+}
+
+function animationStart() {
+  console.log('start', config);
+  app.ticker.start();
+}
+
+function animationStop() {
+  console.log('stop', config);
+  app.ticker.stop();
 }
 
 function scaleUp(item, key, length, cb) {
@@ -157,16 +175,21 @@ function scaleUp(item, key, length, cb) {
  */
 function gameLoop(delta) {
 
-  if (config.isTap === true) {
-    fadeOut(texts[0]);
+  if (config.isTap === true && config.isSec01 === undefined) {
+    const fadeOutText = fadeOut(texts[0]);
 
     // ボタンが押されたら、sec01を発火
-    if (config.isTap === false) {
+    if (fadeOutText === true) {
       addCircle(1);
       addCircle(.5);
       addCircle(.25);
       config.isSec01 = true;
     }
+  }
+
+  // [Are You Ready]をタップしていない状態
+  if (config.isTap === false && config.isSec01 === undefined) {
+    animationStop();
   }
 
   // Step01
@@ -299,8 +322,8 @@ function gameLoop(delta) {
     image.anchor.x = 0.5;
     image.anchor.y = 0.5;
     image.x        = window.innerWidth * 0.5;
-    image.y        = -470;
-    // image.y = window.innerHeight * 0.5;
+    // image.y        = -470;
+    image.y = window.innerHeight * 0.5;
 
     const scale = 3.2;
     image.scale.x = scale;
@@ -345,7 +368,7 @@ function gameLoop(delta) {
   if (config.isSec03 === false && config.isSec04 === false && config.isSec05 === undefined) {
     // [画像]の準備（設定）
     const angular = images[1];
-    const image = images[2];
+    const image   = images[2];
 
     image.anchor.x = 0.45;
     image.anchor.y = 0.6;
@@ -371,8 +394,6 @@ function gameLoop(delta) {
     const image       = images[2];
     const imageFilter = filters[2];
 
-    // console.log(filters, imageFilter.blur);
-
     // 画像の透過度を上げる
     if (image.alpha < 1) {
       image.alpha += 0.05;
@@ -387,6 +408,43 @@ function gameLoop(delta) {
     if (imageFilter.blur <= 0) {
       config.isSec05 = false;
     }
+  }
+
+  if (config.isSec05 === false && config.isSec06 === undefined) {
+    const image = images[2];
+
+    /** [metronome]を作成 **/
+    const metronome = addText('METRONOME', {fontWeight: 'bold'});
+    metronome.anchor.x = 0.5;
+    metronome.anchor.y = 0.5;
+    metronome.position.x = window.innerWidth * 0.5;
+    // ng-metronomeのロゴが正位置にきたら実行する
+    // metronome.position.y = image.y + image.height + 10;
+    metronome.alpha = 0;
+
+    addFilters(metronome, 5);
+
+    //[metronome]をステージに追加
+    app.stage.addChild(metronome);
+    /** /[metronome]を作成 **/
+
+    /** [START]を作成 **/
+    const start = addText('START', {fontWeight: 'bold'});
+    start.anchor.x = 0.5;
+    start.anchor.y = 0.5;
+    start.position.x = window.innerWidth * 0.5;
+    // ng-metronomeのロゴが正位置にきたら実行する
+    // start.position.y = metronome.y + metronome.height + 92;
+    start.alpha = 0;
+
+    addFilters(start, 5);
+
+    //[metronome]をステージに追加
+    app.stage.addChild(start);
+
+
+    // コードの最後にループを止める
+    animationStop();
   }
 
   // Destroy application
