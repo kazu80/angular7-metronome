@@ -7,8 +7,8 @@ const config = {
   isSec05: undefined,
   isSec06: undefined,
   isSec07: undefined,
-  isEnd: false,
-  isStart: false
+  isSec08: undefined,
+  isEnd: false
 };
 
 //Create a Pixi Application
@@ -224,7 +224,7 @@ function gameLoop(delta) {
       app.stage.addChild(image);
 
       // [METRONOME]を準備
-      const text = addText('METRONOME', {fontFamily : 'brandon-grotesque', fill: 'white', fontWeight: 'bold'});
+      const text = addText('METRONOME', {fontFamily : 'brandon-grotesque', fill: 'white', fontWeight: 'bold', fontSize: 40});
       text.anchor.x   = 0.5;
       text.anchor.y   = 0.5;
       text.position.x = window.innerWidth * 0.5;
@@ -354,18 +354,23 @@ function gameLoop(delta) {
     // 画像の下移動が終わったら
     if (image.y >= positionY) {
       // 序盤で使った丸を消す
-      circles.forEach((circle, key) => circle.alpha = 0);
+      circles.forEach((circle, key) => {
+        circle.scale.x = 0;
+        circle.scale.y = 0;
+      });
 
-      // 画像を縮小させる
-      if (image.scale.y > 1) {
-        image.scale.x -= 0.02;
-        image.scale.y -= 0.02;
-      }
+      setTimeout(() => {
+        // 画像を縮小させる
+        if (image.scale.y > 1) {
+          image.scale.x -= 0.02;
+          image.scale.y -= 0.02;
+        }
 
-      // 画像が縮小終わったら、step04の静止状態へ
-      if (image.scale.y <= 1) {
-        config.isSec04 = false;
-      }
+        // 画像が縮小終わったら、step04の静止状態へ
+        if (image.scale.y <= 1) {
+          config.isSec04 = false;
+        }
+      }, 1500);
     }
   }
 
@@ -444,11 +449,9 @@ function gameLoop(delta) {
 
     // TOUCHイベント
     start.on('tap', () => {
-      config.isStart = true;
+      config.isSec08 = true;
 
       window.dispatchEvent(new CustomEvent('openingended'));
-
-      config.isEnd = true;
       animationStart();
     });
 
@@ -509,8 +512,19 @@ function gameLoop(delta) {
 
     // 画像が出現したら
     if (filterS.blur <= 0) {
+      config.isSec07 = false;
       animationStop();
     }
+  }
+
+  // Stage08
+  // STARTを押された
+  if (config.isSec08 === true) {
+    circles.forEach((circle, key) =>
+      scaleUp(circle, key, circles.length,() => {
+        config.isEnd = true;
+      })
+    );
   }
 
   // Destroy application
