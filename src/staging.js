@@ -7,7 +7,8 @@ const config = {
   isSec05: undefined,
   isSec06: undefined,
   isSec07: undefined,
-  isEnd: false
+  isEnd: false,
+  isStart: false
 };
 
 //Create a Pixi Application
@@ -31,7 +32,7 @@ window.onload = function () {
   addImage('assets/image/stage/logo.svg');
 
   /** Are you ready **/
-  const button = addText('ARE YOU READY ?', {});
+  const button = addText('ARE YOU READY ?', {fontFamily : 'brandon-grotesque'});
   button.anchor.x = 0.5;
   button.anchor.y = 0.5;
   button.position.x = window.innerWidth * 0.5;
@@ -44,7 +45,6 @@ window.onload = function () {
   button.on('tap', () => {
     config.isTap = true;
 
-    console.log('tap!', config);
     animationStart();
   });
 
@@ -57,6 +57,11 @@ window.onload = function () {
 
   // Add the canvas that Pixi automatically created for you to the HTML document
   document.body.querySelector('#canvas-wrapper').appendChild(app.view);
+
+  // オープニングが終わったら発火する
+  window.addEventListener('openingended', (e) => {
+    document.getElementById('app').classList.add('active');
+  });
 };
 
 /**
@@ -219,7 +224,7 @@ function gameLoop(delta) {
       app.stage.addChild(image);
 
       // [METRONOME]を準備
-      const text = addText('METRONOME', {fill: 'white', fontWeight: 'bold'});
+      const text = addText('METRONOME', {fontFamily : 'brandon-grotesque', fill: 'white', fontWeight: 'bold'});
       text.anchor.x   = 0.5;
       text.anchor.y   = 0.5;
       text.position.x = window.innerWidth * 0.5;
@@ -412,12 +417,10 @@ function gameLoop(delta) {
 
   if (config.isSec05 === false && config.isSec06 === undefined) {
     /** [metronome]を作成 **/
-    const metronome = addText('METRONOME', {fontWeight: 'bold', fontSize: 40});
+    const metronome = addText('METRONOME', {fontFamily : 'brandon-grotesque', fontWeight: 'bold', fontSize: 40});
     metronome.anchor.x = 0.5;
     metronome.anchor.y = 0.5;
     metronome.position.x = window.innerWidth * 0.5;
-    // ng-metronomeのロゴが正位置にきたら実行する
-    // metronome.position.y = image.y + image.height + 10;
     metronome.alpha = 0;
 
     addFilters(metronome, 5);
@@ -427,15 +430,27 @@ function gameLoop(delta) {
     /** /[metronome]を作成 **/
 
     /** [START]を作成 **/
-    const start = addText('START', {fontWeight: 'bold', fontSize: 20});
+    const start = addText('START', {fontFamily : 'brandon-grotesque', fontSize: 20});
     start.anchor.x = 0.5;
     start.anchor.y = 0.5;
     start.position.x = window.innerWidth * 0.5;
-    // ng-metronomeのロゴが正位置にきたら実行する
-    // start.position.y = metronome.y + metronome.height + 92;
     start.alpha = 0;
 
+    // ボカシ
     addFilters(start, 5);
+
+    //タッチイベント(マウスイベント)を有効化
+    start.interactive = true;
+
+    // TOUCHイベント
+    start.on('tap', () => {
+      config.isStart = true;
+
+      window.dispatchEvent(new CustomEvent('openingended'));
+
+      config.isEnd = true;
+      animationStart();
+    });
 
     //[metronome]をステージに追加
     app.stage.addChild(start);
