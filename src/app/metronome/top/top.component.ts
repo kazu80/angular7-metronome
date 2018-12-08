@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./top.component.scss']
 })
 export class TopComponent implements OnInit {
+  playBeat: boolean;
 
   constructor() { }
 
@@ -13,6 +14,10 @@ export class TopComponent implements OnInit {
   }
 
   handlePlayBeat($event): void {
-    console.log('foo', $event);
+    this.playBeat = true;
+  }
+
+  handlePlayedBeat($event): void {
+    this.playBeat = false;
   }
 }

@@ -1,3 +1,10 @@
+$spBreakPoint: 375;
+
+@function pxToVw($pxValue) {
+    @return (($pxValue / $spBreakPoint) * 100) + vw;
+}
+
+
 /* You can add global styles to this file, and also import other style files */
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
@@ -89,3 +96,31 @@ html, body {
 }
 /*** /top ***/
 
+.circle {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    animation: ripple ease-out;
+    animation-duration: 1000ms;
+    width: pxToVw(210);
+    height: pxToVw(210);
+    border: pxToVw(5) solid rgba(255,255,255,.8);
+}
+
+@keyframes ripple {
+    0% {
+        width: pxToVw(179);
+        height: pxToVw(179);
+        border-color: rgba(255,255,255,1);
+        border-width: pxToVw(1);
+    }
+
+    100% {
+        width: pxToVw(280);
+        height: pxToVw(280);
+        border-color: rgba(255,255,255,0);
+        border-width: pxToVw(13);
+    }
+}

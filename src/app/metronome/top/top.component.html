@@ -5,7 +5,7 @@
       <p class="logo-text">METRONOME</p>
     </div>
   </header>
-  <app-display class="display">
+  <app-display [beat]="playBeat" (playedBeat)="handlePlayedBeat($event)" class="display">
     <app-run (playBeat)="handlePlayBeat($event)"></app-run>
   </app-display>
 
