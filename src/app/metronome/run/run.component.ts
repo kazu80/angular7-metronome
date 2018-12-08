@@ -1,4 +1,5 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Sound, SoundService} from '../../service/sound.service';
 
 @Component({
   selector: 'app-run',
@@ -7,16 +8,24 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 })
 export class RunComponent implements OnInit {
   context: AudioContext;
+  soundSourceBeat: AudioBufferSourceNode;
+  soundSourceTempo: AudioBufferSourceNode;
   soundSource: AudioBufferSourceNode;
   soundGain: GainNode;
   analyser: AnalyserNode;
   loop: boolean;
   volume: number;
+  sound: Sound;
+  interval: any;
+  tempo: number;
 
   @Output() playBeat: EventEmitter<{ value: string }> = new EventEmitter();
 
-  constructor() {
+  constructor(
+    private soundService: SoundService
+  ) {
     this.volume = 5;
+    this.tempo = 120;
   }
 
   ngOnInit() {
@@ -24,15 +33,68 @@ export class RunComponent implements OnInit {
   }
 
   private onClick() {
-    const url = '../../../assets/sound/s_02.mp3';
+    const tempo_sound = this.soundService.selectedValue;
+    const beat_sound  = this.soundService.selectedValueBeat;
 
-    this.playBeat.emit({ value: 'foo'});
+    // Beat Sound
+    const beatSoundURL = beat_sound.file;
 
-    this._loadBufferFromURL(url, (buffer) => {
-      this.initialSound (buffer, this.volume * 0.1);
+    // Tempo Sound
+    const tempoSoundURL = tempo_sound.file;
 
+    // ビート
+    // this.beat               = this.beatService.selectedValue;
+    // const beatCount: number = this.beat.beat;
+    const beatCount = 4;
+
+    // Run
+    let count: any = 1;
+    this.interval  = setInterval(() => {
+      count % beatCount === 0 ? this._playBeat(beatSoundURL) : this._playTempo(tempoSoundURL);
+      count++;
+
+      // tempo counter
+      // this.counterService.inclementCount();
+
+      // 波紋エフェクト用のカスタムイベント発火
+      this.playBeat.emit({ value: 'foo'});
+
+    }, 60 * 1000 / this.tempo);
+
+    // サウンドの再生
+    if (this.soundSourceBeat === undefined) {
+      this._loadBufferFromURL(beatSoundURL, (buffer) => {
+        this.initialSound ('beat', buffer, this.volume * 0.1);
+
+        this.soundSource.start (0);
+      });
+    } else {
       this.soundSource.start (0);
-    });
+    }
+  }
+
+  private _playBeat (URL) {
+    if (this.soundSourceBeat === undefined) {
+      this._loadBufferFromURL(URL, (buffer) => {
+        this.initialSound ('beat', buffer, this.volume * 0.1);
+
+        this.soundSourceBeat.start (0);
+      });
+    } else {
+      this.soundSourceBeat.start (0);
+    }
+  }
+
+  private _playTempo (URL) {
+    if (this.soundSourceTempo === undefined) {
+      this._loadBufferFromURL(URL, (buffer) => {
+        this.initialSound ('tempo', buffer, this.volume * 0.1);
+
+        this.soundSourceTempo.start (0);
+      });
+    } else {
+      this.soundSourceTempo.start (0);
+    }
   }
 
   private _loadBufferFromURL (url, callback) {
@@ -63,7 +125,7 @@ export class RunComponent implements OnInit {
     request.send ();
   }
 
-  private initialSound (buffer, gain) {
+  private initialSound (kind, buffer, gain) {
     this.soundSource = this.context.createBufferSource ();
     this.soundGain   = this.context.createGain ();
     this.analyser    = this.context.createAnalyser ();
@@ -93,8 +155,17 @@ export class RunComponent implements OnInit {
       }
       */
 
-      this.initialSound (buffer, this.volume * 0.1);
+      this.initialSound (kind, buffer, this.volume * 0.1);
     };
+
+    switch (kind) {
+      case 'beat':
+        this.soundSourceBeat = this.soundSource;
+        break;
+      case 'tempo':
+        this.soundSourceTempo = this.soundSource;
+        break;
+    }
 
     // this.analyser.fftSize = this.fftSize;
 
