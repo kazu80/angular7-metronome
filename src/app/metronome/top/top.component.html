@@ -6,7 +6,7 @@
     </div>
   </header>
   <app-display class="display">
-    <app-run></app-run>
+    <app-run (playValue)="handlePlayValue($event)"></app-run>
   </app-display>
 
   <div class="buttons-wrapper">
