@@ -18,6 +18,6 @@ export class TopComponent implements OnInit {
   }
 
   handlePlayedBeat($event): void {
-    this.playBeat = false;
+    setTimeout(() => this.playBeat = false);
   }
 }
