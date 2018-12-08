@@ -30,6 +30,14 @@ export class DisplayComponent implements OnInit {
       });
       this._el.appendChild(ripple);
 
+      //
+      const display = this._el.querySelector('#display');
+      display.classList.add('active');
+      display.addEventListener('animationend', (e: any) => {
+        e.target.classList.remove('active');
+      });
+
+      // beatのvalueをfalseにする
       this.playedBeat.emit({ value: 'foo'});
     }
   }
