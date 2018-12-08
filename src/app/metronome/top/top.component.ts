@@ -12,7 +12,7 @@ export class TopComponent implements OnInit {
   ngOnInit() {
   }
 
-  handlePlayValue($event): void {
+  handlePlayBeat($event): void {
     console.log('foo', $event);
   }
 }

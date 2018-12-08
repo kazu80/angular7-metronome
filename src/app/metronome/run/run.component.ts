@@ -13,7 +13,7 @@ export class RunComponent implements OnInit {
   loop: boolean;
   volume: number;
 
-  @Output() playValue: EventEmitter<{ value: string }> = new EventEmitter();
+  @Output() playBeat: EventEmitter<{ value: string }> = new EventEmitter();
 
   constructor() {
     this.volume = 5;
@@ -26,8 +26,7 @@ export class RunComponent implements OnInit {
   private onClick() {
     const url = '../../../assets/sound/s_02.mp3';
 
-    console.log('bar');
-    this.playValue.emit({ value: 'foo'});
+    this.playBeat.emit({ value: 'foo'});
 
     this._loadBufferFromURL(url, (buffer) => {
       this.initialSound (buffer, this.volume * 0.1);
