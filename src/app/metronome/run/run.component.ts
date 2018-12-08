@@ -18,6 +18,7 @@ export class RunComponent implements OnInit {
   sound: Sound;
   interval: any;
   tempo: number;
+  button: string;
 
   @Output() playBeat: EventEmitter<{ value: string }> = new EventEmitter();
 
@@ -30,24 +31,35 @@ export class RunComponent implements OnInit {
 
   ngOnInit() {
     this.context = new AudioContext();
+    this.button  = 'inactive';
   }
 
   private onClick() {
-    const tempo_sound = this.soundService.selectedValue;
-    const beat_sound  = this.soundService.selectedValueBeat;
+    // ボタンの表示切り替え
+    this.button = this.button === 'active' ? 'inactive' : 'active';
 
-    // Beat Sound
-    const beatSoundURL = beat_sound.file;
+    // 実施
+    switch (this.button) {
+      case 'active':
+        this._metronomePlay();
+        break;
+      case 'inactive':
+        this._metronomeStop();
+        break;
+    }
+  }
 
-    // Tempo Sound
-    const tempoSoundURL = tempo_sound.file;
+  private _metronomePlay() {
+    // Sound設定
+    const beatSoundURL  = this.soundService.selectedValueBeat.file;
+    const tempoSoundURL = this.soundService.selectedValue.file;
 
-    // ビート
+    // ビート設定
     // this.beat               = this.beatService.selectedValue;
     // const beatCount: number = this.beat.beat;
     const beatCount = 4;
 
-    // Run
+    // 実行
     let count: any = 1;
     this.interval  = setInterval(() => {
       count % beatCount === 0 ? this._playBeat(beatSoundURL) : this._playTempo(tempoSoundURL);
@@ -60,17 +72,10 @@ export class RunComponent implements OnInit {
       this.playBeat.emit({ value: 'foo'});
 
     }, 60 * 1000 / this.tempo);
+  }
 
-    // サウンドの再生
-    if (this.soundSourceBeat === undefined) {
-      this._loadBufferFromURL(beatSoundURL, (buffer) => {
-        this.initialSound ('beat', buffer, this.volume * 0.1);
-
-        this.soundSource.start (0);
-      });
-    } else {
-      this.soundSource.start (0);
-    }
+  private _metronomeStop() {
+    clearInterval(this.interval);
   }
 
   private _playBeat (URL) {
