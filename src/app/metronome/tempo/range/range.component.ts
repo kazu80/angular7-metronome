@@ -14,7 +14,6 @@ export class RangeComponent implements OnInit {
   }
 
   public onChange(e: any) {
-    console.log(e.target.value);
     this.service.tempo = e.target.value;
   }
 }
