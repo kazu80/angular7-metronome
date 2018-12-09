@@ -1,0 +1,40 @@
+$spBreakPoint: 375;
+
+@function pxToVw($pxValue) {
+    @return (($pxValue / $spBreakPoint) * 100) + vw;
+}
+
+.tempo-slider {
+    .value-number-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .value-number {
+            color: #ffffff;
+            font-size: pxToVw(22);
+            font-weight: bold;
+        }
+    }
+
+    .tempo-slider-input {
+        -webkit-appearance: none;  /* Override default CSS styles */
+        appearance: none;
+        width: 100%; /* Full-width */
+        height: 3px; /* Specified height */
+        background: #ffffff; /* Grey background */
+        outline: none; /* Remove outline */
+        box-shadow:1px 1px 2px 0px rgba(0,0,0,0.7);
+    }
+
+    .tempo-slider-input::-webkit-slider-thumb {
+        -webkit-appearance: none; /* Override default look */
+        appearance: none;
+        width: pxToVw(17); /* Set a specific slider handle width */
+        height: pxToVw(17); /* Slider handle height */
+        background: #ffffff; /* Green background */
+        border: 1px solid #707070;
+        border-radius: 50%;
+        cursor: pointer; /* Cursor on hover */
+    }
+}
