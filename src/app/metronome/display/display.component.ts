@@ -8,7 +8,7 @@ import {Observable} from 'rxjs';
 })
 export class DisplayComponent implements OnInit {
   @Input() beat: boolean;
-  @Output() playedBeat: EventEmitter = new EventEmitter();
+  @Output() playedBeat: EventEmitter<any> = new EventEmitter();
 
   private _el: HTMLElement;
 

@@ -34,7 +34,7 @@ export class RunComponent implements OnInit {
     this.button  = 'inactive';
   }
 
-  private onClick() {
+  onClick() {
     // ボタンの表示切り替え
     this.button = this.button === 'active' ? 'inactive' : 'active';
 

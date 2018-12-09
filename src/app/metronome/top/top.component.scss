@@ -1,7 +1,12 @@
 $spBreakPoint: 375;
+$spBreakPointHeight: 667;
 
 @function pxToVw($pxValue) {
     @return (($pxValue / $spBreakPoint) * 100) + vw;
+}
+
+@function pxToVwH($pxValue) {
+    @return (($pxValue / $spBreakPointHeight) * 100) + vh;
 }
 
 .wrapper {
@@ -10,7 +15,7 @@ $spBreakPoint: 375;
     background-color: #DD0031;
 
     header {
-        margin-bottom: pxToVw(114);
+        margin-bottom: pxToVwH(80);
         width: 100%;
 
         .logo-wrapper {
@@ -37,9 +42,22 @@ $spBreakPoint: 375;
     .display {
         display: block;
         position: relative;
-        margin: 0 auto pxToVw(187);
+        margin: 0 auto pxToVwH(80);
         width: pxToVw(179);
         height: pxToVw(179);
+    }
+
+    .content-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: pxToVwH(100);
+        padding: 0 pxToVw(20);
+
+        .tempo-range {
+            width: 100%;
+        }
     }
 
     .buttons-wrapper {
