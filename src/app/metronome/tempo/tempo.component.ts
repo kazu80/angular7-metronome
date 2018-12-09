@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, EventEmitter, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-tempo',
@@ -6,10 +6,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./tempo.component.scss']
 })
 export class TempoComponent implements OnInit {
+  @Output() activeTempo: EventEmitter<any> = new EventEmitter();
+  isActive: boolean;
 
-  constructor() { }
+  private _el: HTMLElement;
 
-  ngOnInit() {
+  constructor(
+    el: ElementRef
+  ) {
+    this._el = el.nativeElement;
   }
 
+  ngOnInit() {
+    this.isActive = false;
+  }
+
+  public onClick($event) {
+    this.isActive = !this.isActive;
+    this.activeTempo.emit();
+
+    const button = this._el.querySelector('#tempo-button');
+    button.classList.toggle('active');
+  }
 }

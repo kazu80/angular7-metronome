@@ -9,12 +9,12 @@
     <app-run (playBeat)="handlePlayBeat($event)"></app-run>
   </app-display>
 
-  <div class="content-wrapper">
-    <app-tempo-range class="tempo-range"></app-tempo-range>
+  <div id="content" class="content-wrapper">
+    <app-tempo-range id="content-tempo" class="tempo-range"></app-tempo-range>
   </div>
 
   <div class="buttons-wrapper">
-    <app-tempo></app-tempo>
+    <app-tempo (activeTempo)="handleTempoActive($event)"></app-tempo>
     <app-beat></app-beat>
     <app-sound></app-sound>
   </div>

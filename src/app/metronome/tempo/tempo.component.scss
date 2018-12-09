@@ -9,9 +9,6 @@ $spBreakPoint: 375;
     width: pxToVw(74.61);
     height: pxToVw(74.61);
     border-radius: 50%;
-    background-color: #ffffff;
-    border: 1px solid #707070;
-    box-shadow:3px 3px 6px 0px rgba(0,0,0,0.5);
 }
 
 .tempo-button {
@@ -19,7 +16,37 @@ $spBreakPoint: 375;
     top : 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #fff;
     font-size: pxToVw(18);
     line-height: 100%;
     font-weight: bold;
+    border: 1px solid #707070;
+    box-shadow:3px 3px 6px 0 rgba(0,0,0,0.5);
+    transition: background-color 200ms ease-out, color 200ms ease-out;
+
+    &.active {
+        color : #ffffff;
+        background-color: #1A00DD;
+        animation: bound 200ms ease-out;
+    }
+
+    &:focus {
+        outline: none;
+    }
+}
+
+@keyframes bound {
+    0%, 100% {
+        transform: scale(1) translate(-50%, -50%);
+    }
+
+    50% {
+        transform: scale(.9) translate(-50%, -50%);
+    }
+
 }
