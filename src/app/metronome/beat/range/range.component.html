@@ -1,0 +1,7 @@
+<div class="beat-slider">
+  <div class="value-number-wrapper">
+    <p class="value-number">{{service.min}}</p>
+    <p class="value-number">{{service.max}}</p>
+  </div>
+  <input id="beat-slider" class="beat-slider-input" type="range" [min]="service.min" [max]="service.max" step="1" [value]="service.selectedValue" (input)="onChange($event)">
+</div>

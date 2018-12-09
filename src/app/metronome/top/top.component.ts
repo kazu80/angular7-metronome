@@ -28,7 +28,22 @@ export class TopComponent implements OnInit {
   }
 
   handleTempoActive($event): void {
+    this.resetClass();
     const content = this._el.querySelector('#content-tempo');
     content.classList.toggle('active');
+  }
+
+  handleBeatActive($event): void {
+    this.resetClass();
+    const content = this._el.querySelector('#content-beat');
+    content.classList.toggle('active');
+  }
+
+  resetClass(): void {
+    const ranges = this._el.querySelectorAll('.range');
+    console.log(ranges);
+    ranges.forEach((range, key, parent) => {
+      range.classList.remove('active');
+    });
   }
 }

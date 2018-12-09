@@ -1,6 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Sound, SoundService} from '../../service/sound.service';
 import {TempoService} from '../../service/tempo.service';
+import {BeatService} from '../../service/beat.service';
 
 @Component({
   selector: 'app-run',
@@ -20,11 +21,13 @@ export class RunComponent implements OnInit {
   interval: any;
   tempo: number;
   button: string;
+  beat: number;
 
   @Output() playBeat: EventEmitter<{ value: string }> = new EventEmitter();
 
   constructor(
     private soundService: SoundService,
+    private beatService: BeatService,
     private tempoService: TempoService
   ) {
     this.volume = 5;
@@ -60,9 +63,7 @@ export class RunComponent implements OnInit {
     this.tempo = this.tempoService.tempo;
 
     // ビート設定
-    // this.beat               = this.beatService.selectedValue;
-    // const beatCount: number = this.beat.beat;
-    const beatCount = 4;
+    const beatCount: number = this.beatService.selectedValue;
 
     // 実行
     let count: any = 1;

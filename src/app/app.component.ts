@@ -3,12 +3,14 @@ import {createCustomElement} from '@angular/elements';
 import {TopComponent} from './metronome/top/top.component';
 import {SoundService} from './service/sound.service';
 import {TempoService} from './service/tempo.service';
+import {BeatService} from './service/beat.service';
 
 @Component({
   selector: 'app-metronome',
   template: ``,
   providers: [
     SoundService,
+    BeatService,
     TempoService
   ]
 })
