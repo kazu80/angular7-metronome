@@ -1,7 +1,7 @@
 <div class="tempo-slider">
   <div class="value-number-wrapper">
-    <p class="value-number">1</p>
-    <p class="value-number">255</p>
+    <p class="value-number">{{service.min}}</p>
+    <p class="value-number">{{service.max}}</p>
   </div>
-  <input id="tempo-slider" class="tempo-slider-input" type="range" min="1" max="250" step="1" value="80" (input)="onChange($event)">
+  <input id="tempo-slider" class="tempo-slider-input" type="range" [min]="service.min" [max]="service.max" step="1" [value]="service.tempo" (input)="onChange($event)">
 </div>

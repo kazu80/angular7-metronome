@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {TempoService} from '../../../service/tempo.service';
 
 @Component({
   selector: 'app-tempo-range',
@@ -7,12 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RangeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private service: TempoService) { }
 
   ngOnInit() {
   }
 
   public onChange(e: any) {
-    // this.service.tempo = e.target.value;
+    console.log(e.target.value);
+    this.service.tempo = e.target.value;
   }
 }

@@ -1,5 +1,6 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Observable} from 'rxjs';
+import {TempoService} from '../../service/tempo.service';
 
 @Component({
   selector: 'app-display',
@@ -12,7 +13,10 @@ export class DisplayComponent implements OnInit {
 
   private _el: HTMLElement;
 
-  constructor(el: ElementRef) {
+  constructor(
+    el: ElementRef,
+    private tempoService: TempoService
+    ) {
     this._el = el.nativeElement;
   }
 
@@ -40,5 +44,9 @@ export class DisplayComponent implements OnInit {
       // beatのvalueをfalseにする
       this.playedBeat.emit({ value: 'foo'});
     }
+  }
+
+  getTempo(): number {
+    return this.tempoService.tempo;
   }
 }
