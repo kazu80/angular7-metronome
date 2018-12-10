@@ -151,12 +151,10 @@ function animationRegistration() {
 }
 
 function animationStart() {
-  console.log('start', config);
   app.ticker.start();
 }
 
 function animationStop() {
-  console.log('stop', config);
   app.ticker.stop();
 }
 

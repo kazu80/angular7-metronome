@@ -7,6 +7,7 @@ import {Component, ElementRef, OnInit} from '@angular/core';
 })
 export class TopComponent implements OnInit {
   playBeat: boolean;
+  mode: string;
 
   private _el: HTMLElement;
 
@@ -28,20 +29,35 @@ export class TopComponent implements OnInit {
   }
 
   handleTempoActive($event): void {
-    this.resetClass();
+    // modeの切り替え
+    this.mode = 'tempo';
+
+    // ボタンの切り替え
+    const BeatButton = this._el.querySelector('#beat-button');
+    BeatButton.classList.remove('active');
+
+    // コンテンツ部分の表示切り替え
+    this.resetRangeClass();
     const content = this._el.querySelector('#content-tempo');
     content.classList.toggle('active');
   }
 
   handleBeatActive($event): void {
-    this.resetClass();
+    // modeの切り替え
+    this.mode = 'beat';
+
+    // ボタンの切り替え
+    const TempoButton = this._el.querySelector('#tempo-button');
+    TempoButton.classList.remove('active');
+
+    // コンテンツ部分の表示切り替え
+    this.resetRangeClass();
     const content = this._el.querySelector('#content-beat');
     content.classList.toggle('active');
   }
 
-  resetClass(): void {
+  resetRangeClass(): void {
     const ranges = this._el.querySelectorAll('.range');
-    console.log(ranges);
     ranges.forEach((range, key, parent) => {
       range.classList.remove('active');
     });

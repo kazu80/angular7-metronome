@@ -54,6 +54,7 @@ $spBreakPointHeight: 667;
         align-items: center;
         margin-bottom: pxToVwH(100);
         padding: 0 pxToVw(20);
+        min-height: pxToVwH(38);
 
         .beat-range,
         .tempo-range {

@@ -27,12 +27,13 @@ $spBreakPoint: 375;
     font-weight: bold;
     border: 1px solid #707070;
     box-shadow:3px 3px 6px 0 rgba(0,0,0,0.5);
-    transition: background-color 200ms ease-out, color 200ms ease-out;
+    transition: background-color 200ms ease-out, color 200ms ease-out, box-shadow 200ms ease-out;
 
     &.active {
         color : #ffffff;
         background-color: #1A00DD;
         animation: bound 200ms ease-out;
+        box-shadow: none;
     }
 
     &:focus {
