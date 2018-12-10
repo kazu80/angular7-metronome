@@ -1,6 +1,7 @@
 import {Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {TempoService} from '../../service/tempo.service';
 import {BeatService} from '../../service/beat.service';
+import {SoundService} from '../../service/sound.service';
 
 @Component({
   selector: 'app-display',
@@ -17,6 +18,7 @@ export class DisplayComponent implements OnInit, OnChanges {
   constructor(
     el: ElementRef,
     private tempoService: TempoService,
+    private soundService: SoundService,
     private beatService: BeatService
     ) {
     this._el = el.nativeElement;
@@ -56,12 +58,18 @@ export class DisplayComponent implements OnInit, OnChanges {
     return this.beatService.selectedValue;
   }
 
+  getSound(): number {
+    return this.soundService.sound;
+  }
+
   displayNumber(): number {
     switch (this.mode) {
       case 'tempo':
         return this.getTempo();
       case 'beat':
         return this.getBeat();
+      case 'sound':
+        return this.getSound();
       default:
         return this.getTempo();
     }

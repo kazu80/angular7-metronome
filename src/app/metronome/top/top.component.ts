@@ -35,6 +35,8 @@ export class TopComponent implements OnInit {
     // ボタンの切り替え
     const BeatButton = this._el.querySelector('#beat-button');
     BeatButton.classList.remove('active');
+    const SoundButton = this._el.querySelector('#sound-button');
+    SoundButton.classList.remove('active');
 
     // コンテンツ部分の表示切り替え
     this.resetRangeClass();
@@ -49,10 +51,28 @@ export class TopComponent implements OnInit {
     // ボタンの切り替え
     const TempoButton = this._el.querySelector('#tempo-button');
     TempoButton.classList.remove('active');
+    const SoundButton = this._el.querySelector('#sound-button');
+    SoundButton.classList.remove('active');
 
     // コンテンツ部分の表示切り替え
     this.resetRangeClass();
     const content = this._el.querySelector('#content-beat');
+    content.classList.toggle('active');
+  }
+
+  handleSoundActive($event): void {
+    // modeの切り替え
+    this.mode = 'sound';
+
+    // ボタンの切り替え
+    const BeatButton = this._el.querySelector('#beat-button');
+    BeatButton.classList.remove('active');
+    const TempoButton = this._el.querySelector('#tempo-button');
+    TempoButton.classList.remove('active');
+
+    // コンテンツ部分の表示切り替え
+    this.resetRangeClass();
+    const content = this._el.querySelector('#content-sound');
     content.classList.toggle('active');
   }
 

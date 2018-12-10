@@ -18,8 +18,14 @@ export class SoundService {
   private _selectedValueBeat: Sound;
   private _audio: HTMLAudioElement;
   private _recording: string;
+  private _sound: number;
+  private _min: number;
+  private _max: number;
 
   constructor() {
+    this._sound = 1;
+    this._min = 1;
+    this._max = 4;
     this._selectedValue     = SOUNDS[1];
     this._selectedValueBeat = SOUNDS[3];
   }
@@ -44,11 +50,28 @@ export class SoundService {
     this._recording = value;
   }
 
+  get sound(): number {
+    return this._sound;
+  }
+
+  set sound(value: number) {
+    this._sound = value;
+    this._selectedValue = SOUNDS[value - 1];
+  }
+
   public getValues(): Sound[] {
     return SOUNDS;
   }
 
   public createAudioInstance(path: string): void {
     this._audio = new Audio(path);
+  }
+
+  get min(): number {
+    return this._min;
+  }
+
+  get max(): number {
+    return this._max;
   }
 }

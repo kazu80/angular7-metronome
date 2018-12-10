@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, EventEmitter, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-sound',
@@ -6,10 +6,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sound.component.scss']
 })
 export class SoundComponent implements OnInit {
+  @Output() activeSound: EventEmitter<any> = new EventEmitter();
+  isActive: boolean;
 
-  constructor() { }
+  private _el: HTMLElement;
 
-  ngOnInit() {
+  constructor(
+    el: ElementRef
+  ) {
+    this._el = el.nativeElement;
   }
 
+  ngOnInit() {
+    this.isActive = false;
+  }
+
+  public onClick($event) {
+    this.isActive = !this.isActive;
+    this.activeSound.emit();
+
+    const button = this._el.querySelector('#sound-button');
+    button.classList.toggle('active');
+  }
 }

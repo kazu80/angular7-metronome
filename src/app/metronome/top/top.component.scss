@@ -56,6 +56,7 @@ $spBreakPointHeight: 667;
         padding: 0 pxToVw(20);
         min-height: pxToVwH(38);
 
+        .sound-range,
         .beat-range,
         .tempo-range {
             display : none;

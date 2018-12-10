@@ -11,6 +11,8 @@ import { BeatComponent } from './metronome/beat/beat.component';
 import { SoundComponent } from './metronome/sound/sound.component';
 import { RangeComponent } from './metronome/tempo/range/range.component';
 import { RangeBeatComponent } from './metronome/beat/range/range.component';
+import { RangeSoundComponent } from './metronome/sound/range/range.component';
+
 
 @NgModule({
   declarations: [
@@ -22,7 +24,8 @@ import { RangeBeatComponent } from './metronome/beat/range/range.component';
     BeatComponent,
     SoundComponent,
     RangeComponent,
-    RangeBeatComponent
+    RangeBeatComponent,
+    RangeSoundComponent
   ],
   imports: [
     BrowserModule,

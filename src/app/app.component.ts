@@ -11,6 +11,7 @@ import {BeatService} from './service/beat.service';
   providers: [
     SoundService,
     BeatService,
+    SoundService,
     TempoService
   ]
 })

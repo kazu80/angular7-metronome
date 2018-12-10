@@ -70,7 +70,15 @@ export class RunComponent implements OnInit {
     // 実行
     let count: any = 1;
     this.interval  = setInterval(() => {
-      count % beatCount === 0 ? this._playBeat(beatSoundURL) : this._playTempo(tempoSoundURL);
+      // 再生
+      try {
+        count % beatCount === 0 ? this._playBeat(beatSoundURL) : this._playTempo(tempoSoundURL);
+      } catch (e) {
+        this._metronomeStop();
+        this.button = 'inactive';
+        console.warn('got error!', e);
+      }
+
       count++;
 
       // tempo counter
@@ -84,10 +92,13 @@ export class RunComponent implements OnInit {
 
   private _metronomeStop() {
     clearInterval(this.interval);
+
+    this.soundSourceTempo = undefined;
   }
 
   private _playBeat (URL) {
     if (this.soundSourceBeat === undefined) {
+
       this._loadBufferFromURL(URL, (buffer) => {
         this.initialSound ('beat', buffer, this.volume * 0.1);
 
@@ -100,6 +111,7 @@ export class RunComponent implements OnInit {
 
   private _playTempo (URL) {
     if (this.soundSourceTempo === undefined) {
+
       this._loadBufferFromURL(URL, (buffer) => {
         this.initialSound ('tempo', buffer, this.volume * 0.1);
 

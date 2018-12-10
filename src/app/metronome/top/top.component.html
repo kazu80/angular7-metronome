@@ -12,11 +12,12 @@
   <div id="content" class="content-wrapper">
     <app-tempo-range id="content-tempo" class="range tempo-range"></app-tempo-range>
     <app-beat-range id="content-beat" class="range beat-range"></app-beat-range>
+    <app-sound-range id="content-sound" class="range sound-range"></app-sound-range>
   </div>
 
   <div class="buttons-wrapper">
     <app-tempo (activeTempo)="handleTempoActive($event)"></app-tempo>
     <app-beat (activeBeat)="handleBeatActive($event)"></app-beat>
-    <app-sound></app-sound>
+    <app-sound (activeSound)="handleSoundActive($event)"></app-sound>
   </div>
 </div>
