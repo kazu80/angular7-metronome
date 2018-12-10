@@ -1,20 +1,43 @@
 $spBreakPoint: 375;
+$spBreakPointHeight: 667;
 
 @function pxToVw($pxValue) {
     @return (($pxValue / $spBreakPoint) * 100) + vw;
 }
 
+@function pxToVwH($pxValue) {
+    @return (($pxValue / $spBreakPointHeight) * 100) + vh;
+}
 
 :host {
     position: absolute;
-    bottom : 19px;
+    bottom : pxToVwH(19);
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
     z-index: 1;
 }
 
 .run-button {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: pxToVwH(130) 0 0;
+    border-radius: 50%;
+    background-color: transparent;
     font-size: pxToVw(18);
     font-weight: bold;
     line-height: 100%;
+    border: unset;
+    cursor: pointer;
+    z-index: 1;
+
+    &:focus {
+        outline: none;
+    }
 }

@@ -35,6 +35,8 @@ export class RunComponent implements OnInit {
   }
 
   ngOnInit() {
+    // @ts-ignore
+    window.AudioContext = window.AudioContext || window.webkitAudioContext;
     this.context = new AudioContext();
     this.button  = 'inactive';
   }
