@@ -8,6 +8,8 @@ import {Component, ElementRef, OnInit} from '@angular/core';
 export class TopComponent implements OnInit {
   playBeat: boolean;
   mode: string;
+  speechText: string;
+  speechPlay: boolean;
 
   private _el: HTMLElement;
 
@@ -18,6 +20,14 @@ export class TopComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.speechPlay = false;
+
+    /*
+    setTimeout(() => {
+      this.speechText = 'あいみょんあいみょん';
+      this.speechPlay = true;
+    }, 1000);
+    */
   }
 
   handlePlayBeat($event): void {
@@ -81,5 +91,8 @@ export class TopComponent implements OnInit {
     ranges.forEach((range, key, parent) => {
       range.classList.remove('active');
     });
+  }
+
+  speechEnd(): void {
   }
 }

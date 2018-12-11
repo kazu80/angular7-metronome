@@ -5,6 +5,14 @@
       <p class="logo-text">METRONOME</p>
     </div>
   </header>
+
+  <app-voice
+          [accent]="ja-JP"
+          [text]="speechText"
+          [isSpeech]="speechPlay"
+          (end)="speechEnd($event)"
+  ></app-voice>
+
   <app-display [mode]="mode" [beat]="playBeat" (playedBeat)="handlePlayedBeat($event)" class="display">
     <app-run (playBeat)="handlePlayBeat($event)"></app-run>
   </app-display>
