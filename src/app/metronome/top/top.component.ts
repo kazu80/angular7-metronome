@@ -1,4 +1,5 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
+import {$e} from 'codelyzer/angular/styles/chars';
 
 @Component({
   selector: 'app-top',
@@ -10,8 +11,9 @@ export class TopComponent implements OnInit {
   mode: string;
   speechText: string;
   speechPlay: boolean;
+  soundPlayerName: string;
   soundPlayerURL: string;
-  soundPlayerPlay: boolean;
+  soundPlayerPlay: number;
 
   private _el: HTMLElement;
 
@@ -19,21 +21,33 @@ export class TopComponent implements OnInit {
     el: ElementRef
   ) {
     this._el = el.nativeElement;
-    this.soundPlayerPlay = false;
   }
 
   ngOnInit() {
+    this.soundPlayerName = 'open01';
     this.speechPlay = false;
     this.soundPlayerURL = '../../../../assets/sound/staging/open01.mp3';
 
     window.addEventListener('opening-start-1', () => {
-      this.soundPlayerPlay = true;
+      this.soundPlayerPlay = 1;
 
       setTimeout(
         () => window.dispatchEvent(new Event('opening-start-2')),
-        7000
+        7500
       );
+    });
 
+    window.addEventListener('opening-start-2', (e) => {
+      this.soundPlayerPlay = 2;
+    });
+
+    window.addEventListener('opening-start-3', (e) => {
+      this.soundPlayerPlay = 3;
+    });
+
+    window.addEventListener('opening-start-4', (e) => {
+      console.log('opening-start-4');
+      this.soundPlayerPlay = 4;
     });
 
     /*
@@ -98,6 +112,30 @@ export class TopComponent implements OnInit {
     this.resetRangeClass();
     const content = this._el.querySelector('#content-sound');
     content.classList.toggle('active');
+  }
+
+  handleLoadedSound($event): void {
+
+    console.log('handleLoadedSound', $event);
+
+    if ($event.playerName === 'open01') {
+      this.soundPlayerName = 'open02';
+      setTimeout(() => this.soundPlayerURL = '../../../../assets/sound/staging/open02.mp3', 2000);
+    }
+    if ($event.playerName === 'open02') {
+      console.log('foo1');
+      this.soundPlayerName = 'open03';
+      this.soundPlayerURL = '../../../../assets/sound/staging/open02.mp3';
+    }
+    if ($event.playerName === 'open03') {
+      console.log('foo2');
+      this.soundPlayerName = 'open04';
+      this.soundPlayerURL = '../../../../assets/sound/staging/open03.mp3';
+    }
+  }
+
+  handlePlayEndSound($event): void {
+
   }
 
   resetRangeClass(): void {

@@ -452,6 +452,8 @@ function gameLoop(delta) {
     start.on('tap', () => {
       config.isSec08 = true;
 
+      window.dispatchEvent(new Event('opening-start-4'));
+
       window.dispatchEvent(new CustomEvent('openingended'));
       animationStart();
     });
@@ -515,12 +517,15 @@ function gameLoop(delta) {
     if (filterS.blur <= 0) {
       config.isSec07 = false;
       animationStop();
+
+      window.dispatchEvent(new Event('opening-start-3'));
     }
   }
 
   // Stage08
   // STARTを押された
   if (config.isSec08 === true) {
+
     circles.forEach((circle, key) =>
       scaleUp(circle, key, circles.length,() => {
         config.isEnd = true;
