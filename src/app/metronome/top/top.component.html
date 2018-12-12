@@ -13,6 +13,8 @@
           (end)="speechEnd($event)"
   ></app-voice>
 
+  <app-player [url]="soundPlayerURL" [play]="soundPlayerPlay"></app-player>
+
   <app-display [mode]="mode" [beat]="playBeat" (playedBeat)="handlePlayedBeat($event)" class="display">
     <app-run (playBeat)="handlePlayBeat($event)"></app-run>
   </app-display>

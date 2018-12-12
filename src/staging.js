@@ -45,7 +45,10 @@ window.onload = function () {
   button.on('tap', () => {
     config.isTap = true;
 
-    animationStart();
+    window.dispatchEvent(new Event('opening-start-1'));
+    window.addEventListener('opening-start-2', () => {
+      animationStart();
+    });
   });
 
   //ボタンをステージに追加

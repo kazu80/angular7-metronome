@@ -13,6 +13,7 @@ import { RangeComponent } from './metronome/tempo/range/range.component';
 import { RangeBeatComponent } from './metronome/beat/range/range.component';
 import { RangeSoundComponent } from './metronome/sound/range/range.component';
 import { VoiceComponent } from './metronome/voice/voice.component';
+import { PlayerComponent } from './metronome/player/player.component';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { VoiceComponent } from './metronome/voice/voice.component';
     RangeComponent,
     RangeBeatComponent,
     RangeSoundComponent,
-    VoiceComponent
+    VoiceComponent,
+    PlayerComponent
   ],
   imports: [
     BrowserModule,

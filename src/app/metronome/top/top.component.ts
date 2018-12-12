@@ -10,6 +10,8 @@ export class TopComponent implements OnInit {
   mode: string;
   speechText: string;
   speechPlay: boolean;
+  soundPlayerURL: string;
+  soundPlayerPlay: boolean;
 
   private _el: HTMLElement;
 
@@ -17,10 +19,22 @@ export class TopComponent implements OnInit {
     el: ElementRef
   ) {
     this._el = el.nativeElement;
+    this.soundPlayerPlay = false;
   }
 
   ngOnInit() {
     this.speechPlay = false;
+    this.soundPlayerURL = '../../../../assets/sound/staging/open01.mp3';
+
+    window.addEventListener('opening-start-1', () => {
+      this.soundPlayerPlay = true;
+
+      setTimeout(
+        () => window.dispatchEvent(new Event('opening-start-2')),
+        7000
+      );
+
+    });
 
     /*
     setTimeout(() => {
