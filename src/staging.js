@@ -19,51 +19,58 @@ let app = new PIXI.Application({
 });
 
 
+
+
 window.onload = function () {
-  app.renderer.view.style.position = "absolute";
-  app.renderer.view.style.display = "block";
-  app.renderer.autoResize = true;
-  app.renderer.resize(window.innerWidth, window.innerHeight);
-  app.renderer.backgroundColor = 0xffffff;
 
-  /** 画像の読み込み **/
-  addImage('assets/image/stage/logo.svg');
-  addImage('assets/image/stage/angular-blank.png');
-  addImage('assets/image/stage/logo.svg');
+  window.addEventListener('font-loaded', () => {
 
-  /** Are you ready **/
-  const button = addText('ARE YOU READY ?', {fontFamily : 'brandon-grotesque'});
-  button.anchor.x = 0.5;
-  button.anchor.y = 0.5;
-  button.position.x = window.innerWidth * 0.5;
-  button.position.y = window.innerHeight * 0.5;
+    app.renderer.view.style.position = "absolute";
+    app.renderer.view.style.display = "block";
+    app.renderer.autoResize = true;
+    app.renderer.resize(window.innerWidth, window.innerHeight);
+    app.renderer.backgroundColor = 0xffffff;
 
-  //タッチイベント(マウスイベント)を有効化
-  button.interactive = true;
+    /** 画像の読み込み **/
+    addImage('assets/image/stage/logo.svg');
+    addImage('assets/image/stage/angular-blank.png');
+    addImage('assets/image/stage/logo.svg');
 
-  // TOUCHイベント
-  button.on('tap', () => {
-    config.isTap = true;
+    /** Are you ready **/
+    const button = addText('ARE YOU READY ?', {fontFamily : 'brandon-grotesque'});
+    button.anchor.x = 0.5;
+    button.anchor.y = 0.5;
+    button.position.x = window.innerWidth * 0.5;
+    button.position.y = window.innerHeight * 0.5;
 
-    window.dispatchEvent(new Event('opening-start-1'));
-    window.addEventListener('opening-start-2', () => {
-      animationStart();
+    //タッチイベント(マウスイベント)を有効化
+    button.interactive = true;
+
+    // TOUCHイベント
+    button.on('click', () => {
+      config.isTap = true;
+
+      window.dispatchEvent(new Event('opening-start-1'));
+      window.addEventListener('opening-start-2', () => {
+        animationStart();
+      });
     });
-  });
 
-  //ボタンをステージに追加
-  app.stage.addChild(button);
-  /** /Are you ready **/
+    //ボタンをステージに追加
+    app.stage.addChild(button);
+    /** /Are you ready **/
 
-  // アニメーションの登録
-  animationRegistration();
+    // アニメーションの登録
+    animationRegistration();
 
-  // Add the canvas that Pixi automatically created for you to the HTML document
-  document.body.querySelector('#canvas-wrapper').appendChild(app.view);
+    // Add the canvas that Pixi automatically created for you to the HTML document
+    document.body.querySelector('#canvas-wrapper').appendChild(app.view);
 
-  // オープニングが終わったら発火する
-  window.addEventListener('openingended', (e) => {
-    document.getElementById('app').classList.add('active');
+    // オープニングが終わったら発火する
+    window.addEventListener('openingended', (e) => {
+      document.getElementById('app').classList.add('active');
+    });
+
   });
 };
 
@@ -449,7 +456,7 @@ function gameLoop(delta) {
     start.interactive = true;
 
     // TOUCHイベント
-    start.on('tap', () => {
+    start.on('click', () => {
       config.isSec08 = true;
 
       window.dispatchEvent(new Event('opening-start-4'));

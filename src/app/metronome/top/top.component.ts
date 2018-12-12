@@ -1,12 +1,13 @@
-import {Component, ElementRef, OnInit} from '@angular/core';
+import {Component, ElementRef, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {$e} from 'codelyzer/angular/styles/chars';
+import {VoiceService} from '../../service/voice.service';
 
 @Component({
   selector: 'app-top',
   templateUrl: './top.component.html',
   styleUrls: ['./top.component.scss']
 })
-export class TopComponent implements OnInit {
+export class TopComponent implements OnInit, OnChanges{
   playBeat: boolean;
   mode: string;
   speechText: string;
@@ -18,15 +19,14 @@ export class TopComponent implements OnInit {
   private _el: HTMLElement;
 
   constructor(
-    el: ElementRef
+    el: ElementRef,
+    private voiceService: VoiceService
   ) {
     this._el = el.nativeElement;
   }
 
   ngOnInit() {
-    this.soundPlayerName = 'open01';
     this.speechPlay = false;
-    this.soundPlayerURL = '../../../../assets/sound/staging/open01.mp3';
 
     window.addEventListener('opening-start-1', () => {
       this.soundPlayerPlay = 1;
@@ -46,17 +46,13 @@ export class TopComponent implements OnInit {
     });
 
     window.addEventListener('opening-start-4', (e) => {
-      console.log('opening-start-4');
       this.soundPlayerPlay = 4;
     });
-
-    /*
-    setTimeout(() => {
-      this.speechText = 'あいみょんあいみょん';
-      this.speechPlay = true;
-    }, 1000);
-    */
   }
+
+  ngOnChanges(changes: SimpleChanges): void {
+  }
+
 
   handlePlayBeat($event): void {
     this.playBeat = true;
@@ -115,27 +111,21 @@ export class TopComponent implements OnInit {
   }
 
   handleLoadedSound($event): void {
-
-    console.log('handleLoadedSound', $event);
-
-    if ($event.playerName === 'open01') {
-      this.soundPlayerName = 'open02';
-      setTimeout(() => this.soundPlayerURL = '../../../../assets/sound/staging/open02.mp3', 2000);
-    }
-    if ($event.playerName === 'open02') {
-      console.log('foo1');
-      this.soundPlayerName = 'open03';
-      this.soundPlayerURL = '../../../../assets/sound/staging/open02.mp3';
-    }
-    if ($event.playerName === 'open03') {
-      console.log('foo2');
-      this.soundPlayerName = 'open04';
-      this.soundPlayerURL = '../../../../assets/sound/staging/open03.mp3';
-    }
   }
 
   handlePlayEndSound($event): void {
 
+  }
+
+  handleDetect($event): void {
+    const transcript = $event.transcript;
+
+    switch (transcript) {
+      case 'メトロノーム':
+        this.speechText = 'はい、わたしです。';
+        this.speechPlay = true;
+        break;
+    }
   }
 
   resetRangeClass(): void {
@@ -145,6 +135,7 @@ export class TopComponent implements OnInit {
     });
   }
 
-  speechEnd(): void {
+  speechEnd() {
+    this.voiceService.play = false;
   }
 }

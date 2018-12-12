@@ -31,16 +31,20 @@ export class PlayerComponent implements OnInit, OnChanges {
     // @ts-ignore
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
     this.context = new AudioContext();
+
+    const sounds = [
+      '../../../../assets/sound/staging/open01.mp3',
+      '../../../../assets/sound/staging/open02.mp3',
+      '../../../../assets/sound/staging/open03.mp3',
+      '../../../../assets/sound/staging/open03.mp3'
+    ];
+
+    sounds.forEach((url, key) => this._loadBufferFromURL(url, (buffer) => {
+      this.initialSound (key, buffer, this.volume * 0.1);
+    }));
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes.hasOwnProperty('url'));
-    if (changes.hasOwnProperty('url') && changes.url.currentValue !== '' ) {
-      this._loadBufferFromURL(changes.url.currentValue, (buffer) => {
-        this.initialSound (this.playerName, buffer, this.volume * 0.1);
-      });
-    }
-
     if (changes.hasOwnProperty('play') && changes.play.currentValue) {
       this._play(changes.play.currentValue);
     }
@@ -61,8 +65,6 @@ export class PlayerComponent implements OnInit, OnChanges {
 
     this.soundSource.onended = (e) => {
       this.initialSound (name, buffer, this.volume * 0.1);
-
-      this.playEnd.emit({'name': name});
     };
 
     this.soundArray.push(this.soundSource);
@@ -81,7 +83,6 @@ export class PlayerComponent implements OnInit, OnChanges {
             return;
           }
 
-          console.log('emit', this.playerName);
           this.loadedURL.emit({'playerName': this.playerName});
 
           callback (buffer);
@@ -104,13 +105,16 @@ export class PlayerComponent implements OnInit, OnChanges {
     let sound;
     switch (num) {
       case 1:
-        sound = this.soundArray[0];
+        sound = this.soundArray[3];
         break;
       case 2:
-        sound = this.soundArray[1];
+        sound = this.soundArray[2];
         break;
       case 3:
-        sound = this.soundArray[2];
+        sound = this.soundArray[1];
+        break;
+      case 4:
+        sound = this.soundArray[0];
         break;
     }
 

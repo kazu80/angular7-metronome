@@ -8,9 +8,10 @@
 
   <app-voice
           [accent]="ja-JP"
-          [text]="speechText"
-          [isSpeech]="speechPlay"
+          [(text)]="speechText"
+          [(isSpeech)]="voiceService.play"
           (end)="speechEnd($event)"
+          (detect)="handleDetect($event)"
   ></app-voice>
 
   <app-player

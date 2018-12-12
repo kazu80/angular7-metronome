@@ -1,5 +1,10 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 
+interface IWindow extends Window {
+  webkitSpeechRecognition: any;
+  SpeechRecognition: any;
+}
+
 @Component({
   selector: 'app-voice',
   template: ``,
@@ -9,16 +14,20 @@ export class VoiceComponent implements OnInit, OnChanges {
   @Input() autoplay: boolean;
   @Input() accent: string;
   @Input() text: string;
-  @Input() isSpeech: Boolean;
+  @Input() isSpeech: boolean;
   @Input() fireEvent: string;
+
+  @Input() isRecognition: boolean;
 
   @Output() start: EventEmitter<any> = new EventEmitter;
   @Output() end: EventEmitter<any> = new EventEmitter;
   @Output() error: EventEmitter<any> = new EventEmitter;
   // @Output() pause: EventEmitter<any> = new EventEmitter;
   // @Output() resume: EventEmitter<any> = new EventEmitter;
+  @Output() detect: EventEmitter<any> = new EventEmitter;
 
   speech: SpeechSynthesisUtterance;
+  recognition: any;
 
   constructor() {
     if ('speechSynthesis' in window) {
@@ -26,13 +35,32 @@ export class VoiceComponent implements OnInit, OnChanges {
     } else {
       console.error ('Your browser does not support the Web Speech API');
     }
+
+    //
+    const { webkitSpeechRecognition }: IWindow = <IWindow>window;
+    this.recognition = new webkitSpeechRecognition();
+    this.recognition.lang = 'ja-JP';
+    this.recognition.interimResults = false;
+    this.recognition.continuous = true;
+    this.recognition.maxAlternatives = 10;
+
+
+    this.recognition.onresult = (event) => {
+      const results = event.results;
+      for (let i = event.resultIndex; i < results.length; i++) {
+        const transcript = results[i][0].transcript;
+        this.detect.emit({transcript: transcript});
+      }
+    };
+
+    this.recognition.start();
   }
 
   ngOnInit() {
-    this.autoplay = false;
-    this.accent = 'ja-JP';
-    this.text = '全力メトロノームはじめるよ';
-    this.isSpeech = false;
+    this.autoplay  = false;
+    this.accent    = 'ja-JP';
+    this.text      = '';
+    this.isSpeech  = false;
     this.fireEvent = '';
 
     // Initialize attributes
@@ -45,7 +73,6 @@ export class VoiceComponent implements OnInit, OnChanges {
     if (this.autoplay) {
       this.speak ();
     }
-
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -57,6 +84,9 @@ export class VoiceComponent implements OnInit, OnChanges {
       this._textChanged();
       this.speak();
     }
+    if (changes.hasOwnProperty('isSpeech') && changes.isSpeech.currentValue === false ) {
+      console.log('isSpeech!!', 'NO');
+    }
 
     if (changes.hasOwnProperty('accent') && changes.accent.currentValue !== '' ) {
       this._accentChanged();
@@ -65,10 +95,20 @@ export class VoiceComponent implements OnInit, OnChanges {
     if (changes.hasOwnProperty('fireEvent') && changes.fireEvent.currentValue !== '' ) {
       this._eventChanged(changes.fireEvent.currentValue);
     }
+
+    if (changes.hasOwnProperty('isRecognition')) {
+      switch (changes.isRecognition.currentValue) {
+        case true:
+          this.recognition.start();
+          break;
+        case false:
+          this.recognition.stop();
+          break;
+      }
+    }
   }
 
   speak () {
-    console.log(this.speech);
     window.speechSynthesis.speak (this.speech);
   }
 
@@ -98,7 +138,8 @@ export class VoiceComponent implements OnInit, OnChanges {
     };
 
     this.speech.onend = () => {
-      this.end.emit();
+      this.isSpeech = false;
+      this.text = undefined;
     };
 
     this.speech.onerror = () => {

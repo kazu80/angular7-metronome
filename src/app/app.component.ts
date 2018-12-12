@@ -4,6 +4,7 @@ import {TopComponent} from './metronome/top/top.component';
 import {SoundService} from './service/sound.service';
 import {TempoService} from './service/tempo.service';
 import {BeatService} from './service/beat.service';
+import {VoiceService} from './service/voice.service';
 
 @Component({
   selector: 'app-metronome',
@@ -12,7 +13,8 @@ import {BeatService} from './service/beat.service';
     SoundService,
     BeatService,
     SoundService,
-    TempoService
+    TempoService,
+    VoiceService
   ]
 })
 export class AppComponent {
